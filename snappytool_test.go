@@ -17,14 +17,18 @@ func benchEncode(b *testing.B, src []byte) {
 	}
 }
 
-func BenchmarkEncodeCT(b *testing.B) {
-	src, err := ioutil.ReadFile("../../minio/perftest/dicomimport/data/CT.dcm")
+func benchmarkEncode(b *testing.B, filename string) {
+	src, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	benchEncode(b, src)
 }
+
+func BenchmarkEncodeCT(b *testing.B) { benchmarkEncode(b,"../../minio/perftest/dicomimport/data/CT.dcm") }
+//func BenchmarkEncodeCT2(b *testing.B) { benchmarkEncode(b,"../../minio/perftest/dicomimport/data/CT-2.dcm") }
+func BenchmarkEncodeMR(b *testing.B) { benchmarkEncode(b,"../../minio/perftest/dicomimport/data/MR.dcm") }
 
 func benchDecode(b *testing.B, src []byte) {
 	encoded := snappy.Encode(nil, src)
@@ -36,13 +40,15 @@ func benchDecode(b *testing.B, src []byte) {
 	}
 }
 
-func BenchmarkDecodeCT(b *testing.B) {
-	// Note: the file is OS-language dependent so the resulting values are not
-	// directly comparable for non-US-English OS installations.
-	src, err := ioutil.ReadFile("../../minio/perftest/dicomimport/data/CT.dcm")
+func benchmarkDecode(b *testing.B, filename string) {
+	src, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	benchDecode(b, src)
 }
+
+func BenchmarkDecodeCT(b *testing.B) { benchmarkEncode(b,"../../minio/perftest/dicomimport/data/CT.dcm") }
+//func BenchmarkDecodeCT2(b *testing.B) { benchmarkEncode(b,"../../minio/perftest/dicomimport/data/CT-2.dcm") }
+func BenchmarkDecodeMR(b *testing.B) { benchmarkEncode(b,"../../minio/perftest/dicomimport/data/MR.dcm") }
